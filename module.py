@@ -9,6 +9,7 @@ from selenium.common.exceptions import (
     NoAlertPresentException,
     TimeoutException,
 )
+import pandas as pd
 import time
 import urllib.request
 import openpyxl
@@ -18,7 +19,7 @@ class AFT_Automator:
     def __init__(self) -> None:
         self.standby = 1.5
         self.standby_pageshift = 5
-        self.driver = webdriver.Safari()
+        self.driver = webdriver.Chrome()
         self.driver.maximize_window()
         self.driver.implicitly_wait(15)
         self.wait = WebDriverWait(self.driver, 15)
@@ -51,8 +52,29 @@ class AFT_Automator:
         self.ClickButton('//*[@id="container"]/div/div[1]/form/button')
         self.driver.switch_to.alert().accept()
         # time.sleep(15)
+        
+    def POS_Login(self):
+        ID = "8division12"
+        PW = "8division12"
+        self.driver.get("https://pos.aftercompany.co.kr")
+        self.FillTextbox('//*[@id="aftpos-app"]/div/div[1]/form/div/div[1]/input', ID)
+        self.FillTextbox('//*[@id="aftpos-app"]/div/div[1]/form/div/div[2]/input', PW)
+        self.ClickButton('//*[@id="aftpos-app"]/div/div[1]/form/button')
+    
+    def read_stocks_excel(self, xlsx_path):
+        wb=openpyxl.load_workbook(xlsx_path)
+        # MODIFY BELOW
+        for i_ws, ws in enumerate(wb.worksheets):
+            if i_ws<2:
+                continue
+            else:
+                for i_row, row in enumerate(ws.rows):
+                    pass
         pass
-
+        # MODIFY ABOVE
+        
+        
+    
     def Web_RegProducts(self):
         self.AFT_Login()
         """
@@ -69,7 +91,7 @@ class AFT_Automator:
         """
         Process excel form
         """
-
+    
     def Web_RegOfflineStocks(self):
         """
         Read excel file and list all available item names
@@ -80,16 +102,11 @@ class AFT_Automator:
         Register offline stocks with quantity 999
         Click register button
         """
-
+        
     def POS_AutoAcceptRequests(self):
         # Login
-        ID = "8division12"
-        PW = "8division12"
-        self.driver.get("https://pos.aftercompany.co.kr")
-        self.FillTextbox('//*[@id="aftpos-app"]/div/div[1]/form/div/div[1]/input', ID)
-        self.FillTextbox('//*[@id="aftpos-app"]/div/div[1]/form/div/div[2]/input', PW)
-        self.ClickButton('//*[@id="aftpos-app"]/div/div[1]/form/button')
-
+        self.POS_Login()
+        
         # Get to the request menu
         time.sleep(self.standby_pageshift)
         self.ClickButton('//*[@id="aftpos-app"]/header/div[1]/ul/li[2]/a')
@@ -141,3 +158,6 @@ class AFT_Automator:
         Loop-deletion
         """
         
+if __name__=='__main__':
+    test=AFT_Automator()
+    test.read_stocks_excel("StockLists/raw_sabukaru.xlsx")
