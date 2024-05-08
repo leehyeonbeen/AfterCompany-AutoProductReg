@@ -127,3 +127,17 @@ class AFT_Automator:
             except (NoSuchElementException, NoAlertPresentException) as error:
                 print(f"No more requests found. Exiting...")
                 break
+            
+    def Delete_Items(self, excel_path):
+        """
+        Read excel file and makeup a list 
+        """
+        
+        """
+        Read web-registered items and compare with the list
+        """
+        
+        """
+        Loop-deletion
+        """
+        
