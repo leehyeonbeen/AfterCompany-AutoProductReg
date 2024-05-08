@@ -16,9 +16,10 @@ import openpyxl
 
 class AFT_Automator:
     def __init__(self) -> None:
-        self.standby = 0.5
+        self.standby = 1.5
         self.standby_pageshift = 5
         self.driver = webdriver.Safari()
+        self.driver.maximize_window()
         self.driver.implicitly_wait(15)
         self.wait = WebDriverWait(self.driver, 15)
 
@@ -38,10 +39,8 @@ class AFT_Automator:
         time.sleep(self.standby)
 
     def SelectBox(self, XPATH, visible_txt):
-        time.sleep(self.standby)
         selectbox = Select(self.driver.find_element(By.XPATH, XPATH))
         selectbox.select_by_visible_text(visible_txt)
-        time.sleep(self.standby)
 
     def AFT_Login(self):
         ID = "ceo@8division.com"
@@ -112,7 +111,6 @@ class AFT_Automator:
                 )  # 조회
                 self.ClickButton('//*[@id="dataBody"]/tr[1]/td[1]')
                 self.ClickButton('//*[@id="acceptItem"]')
-                time.sleep(self.standby)
                 alert = self.driver.switch_to.alert
                 alert.accept()
                 WebDriverWait(self.driver, 10).until(
